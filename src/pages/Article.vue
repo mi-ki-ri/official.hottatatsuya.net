@@ -38,7 +38,7 @@ onMounted(() => {
 
 const atClick = (id) => {
   console.log(id);
-  location.replace(`/article/${id}`);
+  location.replace(`/#/article/${id}`);
 };
 </script>
 <template>
@@ -56,7 +56,9 @@ const atClick = (id) => {
       <hr class="border-gray-700" />
       <div v-html="marked.parse(article.content)"></div>
       <footer class="text-right">
-        <a :href="'/filter/' + sec" v-for="sec of article.section">{{ sec }}</a>
+        <a :href="'/#/filter/' + sec" v-for="sec of article.section">{{
+          sec
+        }}</a>
       </footer>
     </div>
   </article>

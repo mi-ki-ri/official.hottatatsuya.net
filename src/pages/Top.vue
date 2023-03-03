@@ -44,7 +44,7 @@ onMounted(() => {
 
 const atClick = (id) => {
   console.log(id);
-  location.replace(`/article/${id}`);
+  location.replace(`/#/article/${id}`);
 };
 </script>
 <template>
@@ -61,10 +61,12 @@ const atClick = (id) => {
       </h2>
       <div>
         {{ article.content.substr(0, 70) }}
-        <a class="link" :href="'/article/' + article.id">全文表示</a>
+        <a class="link" :href="'/#/article/' + article.id">全文表示</a>
       </div>
       <footer class="text-right">
-        <a :href="'/filter/' + sec" v-for="sec of article.section">{{ sec }}</a>
+        <a :href="'/#/filter/' + sec" v-for="sec of article.section">{{
+          sec
+        }}</a>
       </footer>
     </div>
   </article>
