@@ -1,18 +1,21 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUpdated } from "vue";
 import { createClient } from "microcms-js-sdk"; //ES6
 import { useRoute } from "vue-router";
 const route = useRoute();
 
 const articles = ref([]);
+const filterId = ref("");
 
-onMounted(() => {
-  console.log(route.params.id);
+const upd = (id) => {
+  console.log(id);
 
-  let q = { limit: 20 };
-  if (route.params.id !== undefined) {
-    q = { limit: 20, filters: "section[contains]" + route.params.id };
+  let q = { limit: 999 };
+  if (id !== "" && id !== undefined) {
+    q = { limit: 999, filters: "section[contains]" + id };
   }
+
+  console.log(q);
 
   // Initialize Client SDK.
   const client = createClient({
@@ -40,6 +43,24 @@ onMounted(() => {
       }
     })
     .catch((err) => console.error(err));
+};
+
+onUpdated(() => {
+  if (filterId.value !== route.params.id) {
+    filterId.value = route.params.id;
+    articles.value.splice(0);
+    upd(filterId.value);
+  }
+});
+
+onMounted(() => {
+  if (route.params.id === undefined) {
+    filterId.value = "";
+    upd(filterId.value);
+  } else {
+    filterId.value = route.params.id;
+    upd(filterId.value);
+  }
 });
 
 const atClick = (id) => {
@@ -54,6 +75,9 @@ const atClick = (id) => {
   >
     <div class="card-body flex flex-col justify-center items-stretch">
       <h2 class="card-title link link-hover" @click="atClick(article.id)">
+        <span class="text-accent" style="text-shadow: 2px 2px rgb(0 0 0 / 0.1)"
+          >&diamondsuit;</span
+        >
         {{ article.title }}
         <small>
           {{ new Date(article.publishedAt).toLocaleDateString() }}
@@ -61,7 +85,9 @@ const atClick = (id) => {
       </h2>
       <div>
         {{ article.content.substr(0, 70) }}
-        <a class="link" :href="'/#/article/' + article.id">全文表示</a>
+        <a class="link continued" :href="'/#/article/' + article.id"
+          >全文表示</a
+        >
       </div>
       <footer class="text-right">
         <a :href="'/#/filter/' + sec" v-for="sec of article.section">{{

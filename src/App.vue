@@ -7,10 +7,14 @@ import MyFooter from "./components/MyFooter.vue";
   <div class="w-full overflow-x-auto overflow-y-scroll">
     <MyHeader />
     <main
-      class="container mx-auto flex flex-wrap justify-around item-center"
+      class="container mx-auto p-2 flex flex-wrap justify-around item-center"
       style="min-height: 55vh"
     >
-      <RouterView />
+      <transition>
+        <keep-alive>
+          <RouterView />
+        </keep-alive>
+      </transition>
     </main>
     <MyFooter />
   </div>
@@ -19,5 +23,9 @@ import MyFooter from "./components/MyFooter.vue";
 <style>
 * {
   box-sizing: border-box;
+}
+
+a.link.continued {
+  color: hsl(var(--s));
 }
 </style>

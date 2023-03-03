@@ -9,11 +9,11 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: "#606D5D",
-          secondary: "#D3CDD7",
-          accent: "#BC9CB0",
-          neutral: "#88958D",
-          "base-100": "#CADCD6",
+          primary: "#97D4EA",
+          secondary: "#9c8952",
+          accent: "#fac4bb",
+          neutral: "#88BED1",
+          "base-100": "#bdd4de",
         },
       },
     ],

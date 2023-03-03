@@ -1,14 +1,17 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onUpdated } from "vue";
 import { createClient } from "microcms-js-sdk"; //ES6
 import { useRoute } from "vue-router";
 import { marked } from "marked";
 const route = useRoute();
 
 const articles = ref([]);
+const articleId = ref("");
 
-onMounted(() => {
-  console.log(route.params.id);
+const upd = (id) => {
+  console.log(id);
+
+  if (articles.value.length > 0) return;
 
   // Initialize Client SDK.
   const client = createClient({
@@ -18,7 +21,7 @@ onMounted(() => {
   client
     .get({
       endpoint: "article",
-      contentId: route.params.id,
+      contentId: id,
     })
     .then((res) => {
       console.log(res);
@@ -34,6 +37,19 @@ onMounted(() => {
       });
     })
     .catch((err) => console.error(err));
+};
+
+onUpdated(() => {
+  if (articleId.value !== route.params.id) {
+    articleId.value = route.params.id;
+
+    articles.value.splice(0);
+    upd(route.params.id);
+  }
+});
+onMounted(() => {
+  articleId.value = route.params.id;
+  upd(route.params.id);
 });
 
 const atClick = (id) => {
@@ -42,11 +58,8 @@ const atClick = (id) => {
 };
 </script>
 <template>
-  <article
-    v-for="article of articles"
-    class="card w-full m-3 bg-base-100 shadow-xl"
-  >
-    <div class="card-body">
+  <article v-for="article of articles" class="card m-3 bg-base-100 shadow-xl">
+    <div class="card-body prose w-full md:w-[65ch]">
       <h2 class="card-title link link-hover" @click="atClick(article.id)">
         {{ article.title }}
         <small>
